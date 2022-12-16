@@ -72,7 +72,9 @@ shuffle() {
     }
         console.log('Player One deck total is ' + (playerDecks.playerOne.deck.length + playerDecks.playerOne.sideDeck.length))
         console.log('Player Two deck total is ' + (playerDecks.playerTwo.deck.length + playerDecks.playerTwo.sideDeck.length))
-
+        console.log('-------------------------')
+        console.log('Flip Your Cards!')
+        console.log('-------------------------')
 // Made players played card to compare winner of hand.
 
     let playerOneCard = playerDecks.playerOne.draw()
