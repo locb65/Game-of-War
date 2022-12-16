@@ -1,6 +1,6 @@
 //Part1: create a working deck on cards in an array
 
-const suit = ['Hearts', 'Spades', ' Clubs', 'Diamonds'];
+const suit = ['Hearts', 'Spades', 'Clubs', 'Diamonds'];
 const rank = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace'];
 const score = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
@@ -25,7 +25,13 @@ class Deck {
       }
     }
   }
+//Edited the draw() to reshuffle side deck into main deck
      draw(){
+      if(this.deck.length == 0 && this.sideDeck.length > 0) {
+        this.deck = this.sideDeck 
+        this.sideDeck = []
+        this.shuffle()
+      }
     return this.deck.shift()
   }
 // //Part2: Shuffle the deck
@@ -52,39 +58,108 @@ shuffle() {
     }
     return {playerOne, playerTwo}
   }
+  // Part4: Game Logic
    flipCard(playerDecks, warPile) {
+          if(playerDecks.playerOne.determineWinner() && playerDecks.deck.determineWinner()) {
+        console.log("This war never ends! It's a Tie")
+        return
+      }
     console.log(playerDecks)
     let playerOneCard = playerDecks.playerOne.draw()
     let playerTwoCard = playerDecks.playerTwo.draw()
+    console.log(this.cardToStr(playerOneCard) + ' Versus ' + this.cardToStr(playerTwoCard))
+
     if(playerOneCard.score > playerTwoCard.score) {
       if (warPile != null) {
-        playerDecks.playerOne.sideDeck.push(warPile)
+        console.log(warPile)
+        playerDecks.playerOne.sideDeck.concat(warPile)
       }
       playerDecks.playerOne.sideDeck.push(playerOneCard, playerTwoCard)
-        console.log(playerOneCard, playerTwoCard)
+        // console.log(playerOneCard, playerTwoCard)
         console.log("Player One wins this hand!")
+        console.log('===============================================================')
+        if(playerDecks.playerTwo.determineWinner()) {
+          console.log('Player One Wins the WARRRRRRR!!!!!!!')
+          return
+        }
     } else if (playerOneCard.score < playerTwoCard.score) {
       if (warPile != null){
-        playerDecks.playerTwo.sideDeck.push(warPile)
+         console.log(warPile)
+        playerDecks.playerTwo.sideDeck.concat(warPile)
       }
       playerDecks.playerTwo.sideDeck.push(playerOneCard, playerTwoCard)
-        console.log(playerOneCard, playerTwoCard)
+        // console.log(playerOneCard, playerTwoCard)
         console.log("Player Two wins this hand!")
+        console.log('===============================================================')
+        if(playerDecks.playerOne.determineWinner()) {
+          console.log('Player Two Wins the WARRRRRRR!!!!!!!')
+          return
+        }
     } else if (playerOneCard.score = playerTwoCard.score) { 
       if (warPile == null) {
         warPile = new Deck
       }
+
+      console.log("I declare War")
       for (let i = 0; i < 3; i++) {
-        warPile.deck.push(playerDecks.playerOne.draw(), playerDecks.playerTwo.draw())
+        
+        if (!playerDecks.playerOne.isFinalCard()) {
+          let temp = playerDecks.playerOne.draw()
+          warPile.deck.push(temp)
+          console.log(temp)
+        }
+        if (!playerDecks.playerTwo.isFinalCard()) {
+          let temp2 = playerDecks.playerTwo.draw()
+          warPile.deck.push(temp2)
+          console.log(temp2)
+        }
       }
-      warPile.push(playerOneCard, playerTwoCard)
-        console.log(playerOneCard, playerTwoCard)
-        console.log("I declare War")
+      if (playerDecks.playerOne.determineWinner()) {
+        playerDecks.playerOne.deck.push(playerOneCard)
+        warPile.deck.push(playerTwoCard)
+      } else if (playerDecks.playerTwo.determineWinner()) {
+        playerDecks.playerTwo.deck.push(playerTwoCard)
+        warPile.deck.push(playerOneCard)
+      } else {
+        warPile.deck.push(playerOneCard, playerTwoCard)
+      }
       this.flipCard(playerDecks, warPile)
   }
     return playerDecks
   }
+  isFinalCard() {
+    return this.deck.length <= 1 && this.sideDeck.length == 0  
+  }
+  determineWinner() {
+    return this.deck.length ==0 && this.sideDeck.length ==0
+  }
+  cardToStr(card) {
+    return card.rank + " of " + card.suit
+  }
 }
+
+//Created a test Deck to test bugs
+
+// let testDeck = new Deck
+// let testDeck2 = new Deck
+// testDeck2.makeDeck()
+// testDeck.makeDeck()
+
+// let testPLayerONe = new Deck
+// testPLayerONe.deck = testDeck.deck
+// let testPLayerONeone = new Deck
+// testPLayerONeone.deck = testDeck2.deck
+// testPLayerONeone.deck.pop()
+// let players = {
+//   playerOne: testPLayerONe,
+//   playerTwo: testPLayerONeone,
+// }
+// testDeck.flipCard(players)
+// // testPLayerONe.deck.push(testDeck.deck[0])
+// // testPLayerONeone.deck.push(testDeck.deck[0])
+// // testPLayerONeone.deck.concat(testDeck.deck.splice(0, 4))
+// // testPLayerONe.deck.concat(testDeck.deck.splice(0, 2))
+// // testDeck.flipCard(players)
 
 
 let deck = new Deck;
@@ -94,9 +169,10 @@ deck.deal()
 let playerDecks = deck.deal()
 console.log(playerDecks.playerOne)
 console.log(playerDecks.playerTwo)
-deck.flipCard(playerDecks)
-deck.flipCard(playerDecks)
-deck.flipCard(playerDecks)
+while (!playerDecks.playerOne.determineWinner() && !playerDecks.playerTwo.determineWinner()) {
+  deck.flipCard(playerDecks)
+} 
+
 
 
 
