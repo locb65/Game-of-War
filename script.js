@@ -64,25 +64,28 @@ shuffle() {
         console.log("This war never ends! It's a Tie")
         return
       }
+// Made players played card to compare winner of hand.
     console.log(playerDecks)
     let playerOneCard = playerDecks.playerOne.draw()
     let playerTwoCard = playerDecks.playerTwo.draw()
     console.log(this.cardToStr(playerOneCard) + ' Versus ' + this.cardToStr(playerTwoCard))
-
+// check for if playerOneCard is bigger that playerTwo Card
     if(playerOneCard.score > playerTwoCard.score) {
       if (warPile != null) {
         console.log(warPile)
         playerDecks.playerOne.sideDeck.concat(warPile)
       }
       playerDecks.playerOne.sideDeck.push(playerOneCard, playerTwoCard)
-        // console.log(playerOneCard, playerTwoCard)
+// console.log(playerOneCard, playerTwoCard)
         console.log("Player One wins this hand!")
         console.log('===============================================================')
         if(playerDecks.playerTwo.determineWinner()) {
           console.log('Player One Wins the WARRRRRRR!!!!!!!')
           return
         }
-    } else if (playerOneCard.score < playerTwoCard.score) {
+    } 
+//  Checks whether Player Two card is larger than player One and resolves
+    else if (playerOneCard.score < playerTwoCard.score) {
       if (warPile != null){
          console.log(warPile)
         playerDecks.playerTwo.sideDeck.concat(warPile)
@@ -95,14 +98,19 @@ shuffle() {
           console.log('Player Two Wins the WARRRRRRR!!!!!!!')
           return
         }
-    } else if (playerOneCard.score = playerTwoCard.score) { 
+    } 
+//check for tie scenario and possible retie to do war.
+    else if (playerOneCard.score = playerTwoCard.score) {
+// 
       if (warPile == null) {
         warPile = new Deck
       }
 
       console.log("I declare War")
       for (let i = 0; i < 3; i++) {
-        
+//Checks for whether there is enough cards in main deck to complete war
+//if not then will shuffle side deck back into main deck. 
+//if no cards ramin then it will compare the last available card to resolve tie. 
         if (!playerDecks.playerOne.isFinalCard()) {
           let temp = playerDecks.playerOne.draw()
           warPile.deck.push(temp)
@@ -127,12 +135,15 @@ shuffle() {
   }
     return playerDecks
   }
+  //added method to determine final card in deck.
   isFinalCard() {
     return this.deck.length <= 1 && this.sideDeck.length == 0  
   }
+  //added method to determine winning condition/losing condition
   determineWinner() {
     return this.deck.length ==0 && this.sideDeck.length ==0
   }
+  //added method to display cards played with rank and suit
   cardToStr(card) {
     return card.rank + " of " + card.suit
   }
@@ -161,7 +172,7 @@ shuffle() {
 // // testPLayerONe.deck.concat(testDeck.deck.splice(0, 2))
 // // testDeck.flipCard(players)
 
-
+//Check for game is running.
 let deck = new Deck;
 deck.makeDeck()
 deck.shuffle()
