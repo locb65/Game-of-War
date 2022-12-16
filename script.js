@@ -114,12 +114,13 @@ shuffle() {
         if (!playerDecks.playerOne.isFinalCard()) {
           let temp = playerDecks.playerOne.draw()
           warPile.deck.push(temp)
-          console.log(temp)
+          // console.log(temp)
         }
         if (!playerDecks.playerTwo.isFinalCard()) {
           let temp2 = playerDecks.playerTwo.draw()
           warPile.deck.push(temp2)
-          console.log(temp2)
+// created a console.log to to mimic facedown cards being played during war.
+          console.log(warPile.deck)
         }
       }
       if (playerDecks.playerOne.determineWinner()) {
