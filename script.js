@@ -79,7 +79,7 @@ shuffle() {
 
     let playerOneCard = playerDecks.playerOne.draw()
     let playerTwoCard = playerDecks.playerTwo.draw()
-      console.log(this.cardToStr(playerOneCard) + ' Versus ' + this.cardToStr(playerTwoCard))
+      console.log('| Player One: ' + this.cardToStr(playerOneCard) + ' | Versus | Player Two: ' + this.cardToStr(playerTwoCard) + ' |')
 
 // check for if playerOneCard is bigger that playerTwo Card
 
